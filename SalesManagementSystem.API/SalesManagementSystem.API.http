@@ -1,0 +1,11 @@
+@SalesManagementSystem.API_HostAddress = http://localhost:5272
+
+GET {{SalesManagementSystem.API_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{SalesManagementSystem.API_HostAddress}}/todos/1
+Accept: application/json
+
+###
