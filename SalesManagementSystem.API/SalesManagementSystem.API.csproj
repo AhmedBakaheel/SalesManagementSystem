@@ -8,4 +8,14 @@
     <PublishAot>true</PublishAot>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SalesManagementSystem.Application\SalesManagementSystem.Application.csproj" />
+    <ProjectReference Include="..\SalesManagementSystem.Domain\SalesManagementSystem.Domain.csproj" />
+    <ProjectReference Include="..\SalesManagementSystem.Infrastructure\SalesManagementSystem.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
