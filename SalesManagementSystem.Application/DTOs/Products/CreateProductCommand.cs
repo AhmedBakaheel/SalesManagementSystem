@@ -9,8 +9,8 @@ namespace SalesManagementSystem.Application.DTOs.Products
 {
     public class CreateProductCommand : IRequest<ProductDto>
     {
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public int StockQuantity { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public decimal CurrentPrice { get; set; }
+        public int InitialStockQuantity { get; set; }
     }
 }
