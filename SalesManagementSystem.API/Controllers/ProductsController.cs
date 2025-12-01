@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SalesManagementSystem.Application.DTOs.Products;
-using SalesManagementSystem.Application.Features.Products.Commands;
+using SalesManagementSystem.Application.DTOs.Common;
+using SalesManagementSystem.Application.Features.Products.Commands; 
 using SalesManagementSystem.Application.Features.Products.Queries;
 
 namespace SalesManagementSystem.API.Controllers
@@ -12,18 +13,14 @@ namespace SalesManagementSystem.API.Controllers
     {
         private readonly IMediator _mediator;
 
-        public ProductsController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        public ProductsController(IMediator mediator) => _mediator = mediator;
 
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ProductDto>> Create(CreateProductCommand command)
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<PagedResponse<ProductDto>>> GetAll([FromQuery] GetAllProductsQuery query)
         {
-            var result = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
@@ -39,6 +36,15 @@ namespace SalesManagementSystem.API.Controllers
                 return NotFound();
             }
             return Ok(product);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ProductDto>> Create(CreateProductCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
     }
 }

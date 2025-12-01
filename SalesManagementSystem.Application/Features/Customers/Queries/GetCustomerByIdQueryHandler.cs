@@ -1,35 +1,22 @@
 ﻿using MediatR;
+using SalesManagementSystem.Application.DTOs.Common;
 using SalesManagementSystem.Application.DTOs.Customers;
-using SalesManagementSystem.Application.Interfaces;
+using SalesManagementSystem.Application.Interfaces.Queries; 
 
 namespace SalesManagementSystem.Application.Features.Customers.Queries
 {
-    public class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery, CustomerDto>
+    public class GetAllCustomersQueryHandler : IRequestHandler<GetAllCustomersQuery, PagedResponse<CustomerDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAdvancedCustomerQueryService _queryService;
 
-        public GetCustomerByIdQueryHandler(IUnitOfWork unitOfWork)
+        public GetAllCustomersQueryHandler(IAdvancedCustomerQueryService queryService)
         {
-            _unitOfWork = unitOfWork;
+            _queryService = queryService;
         }
 
-        public async Task<CustomerDto> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<CustomerDto>> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
         {
-            var customer = await _unitOfWork.Customers.GetByIdAsync(request.Id);
-
-            if (customer == null)
-            {
-                throw new Exception($"Customer with ID {request.Id} not found.");
-            }
-
-            return new CustomerDto
-            {
-                Id = customer.Id,
-                Name = customer.Name,
-                //Phone = customer.Phone,
-                CreditLimit = customer.CreditLimit,
-                Balance = customer.Balance
-            };
+            return await _queryService.GetPagedCustomersAsync(request, cancellationToken);
         }
     }
 }

@@ -1,34 +1,22 @@
 ﻿using MediatR;
+using SalesManagementSystem.Application.DTOs.Common;
 using SalesManagementSystem.Application.DTOs.Products;
-using SalesManagementSystem.Application.Interfaces;
+using SalesManagementSystem.Application.Interfaces.Queries;
 
 namespace SalesManagementSystem.Application.Features.Products.Queries
 {
-    public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, ProductDto>
+    public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, PagedResponse<ProductDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAdvancedProductQueryService _queryService;
 
-        public GetProductByIdQueryHandler(IUnitOfWork unitOfWork)
+        public GetAllProductsQueryHandler(IAdvancedProductQueryService queryService)
         {
-            _unitOfWork = unitOfWork;
+            _queryService = queryService;
         }
 
-        public async Task<ProductDto> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
-            var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
-
-            if (product == null)
-            {
-                return null!; 
-            }
-
-            return new ProductDto
-            {
-                Id = product.Id,
-                Name = product.Name,
-                CurrentPrice = product.CurrentPrice,
-                StockQuantity = product.StockQuantity
-            };
+            return await _queryService.GetPagedProductsAsync(request, cancellationToken);
         }
     }
 }
