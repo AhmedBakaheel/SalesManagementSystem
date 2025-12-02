@@ -13,7 +13,7 @@ namespace SalesManagementSystem.Infrastructure.Repositories
         public IRepository<SaleInvoice> Invoices { get; private set; }
         public IRepository<Payment> Payments { get; private set; }
         public IRepository<InvoiceDetail> InvoiceDetails { get; private set; }
-
+        public IRepository<InvoicePayment> InvoicePayments { get; private set; }
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -23,6 +23,7 @@ namespace SalesManagementSystem.Infrastructure.Repositories
             Invoices = new Repository<SaleInvoice>(_context);
             Payments = new Repository<Payment>(_context);
             InvoiceDetails = new Repository<InvoiceDetail>(_context);
+            InvoicePayments = new Repository<InvoicePayment>(_context);
         }
 
         public async Task<int> CompleteAsync()

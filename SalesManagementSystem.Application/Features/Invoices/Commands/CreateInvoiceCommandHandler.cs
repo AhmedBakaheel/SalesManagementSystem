@@ -17,6 +17,7 @@ namespace SalesManagementSystem.Application.Features.Invoices.Commands
         public async Task<InvoiceCreateResponse> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
         {
             var customer = await _unitOfWork.Customers.GetByIdAsync(request.CustomerId);
+
             if (customer == null || !customer.IsActive)
             {
                 throw new Exception("Customer not found or is inactive.");
@@ -29,9 +30,13 @@ namespace SalesManagementSystem.Application.Features.Invoices.Commands
             {
                 var product = await _unitOfWork.ProductRepository.GetByIdAsync(detailDto.ProductId);
 
-                if (product == null || product.StockQuantity < detailDto.Quantity)
+                if (product == null)
                 {
-                    throw new Exception($"Product ID {detailDto.ProductId} is unavailable or quantity exceeded.");
+                    throw new Exception($"Product ID {detailDto.ProductId} not found.");
+                }
+                if (product.StockQuantity < detailDto.Quantity)
+                {
+                    throw new Exception($"Product ID {detailDto.ProductId} is unavailable (Stock: {product.StockQuantity}, Requested: {detailDto.Quantity}).");
                 }
 
                 decimal lineTotal = detailDto.Quantity * product.CurrentPrice;
@@ -54,11 +59,11 @@ namespace SalesManagementSystem.Application.Features.Invoices.Commands
                 decimal newBalance = customer.Balance + totalAmount;
                 if (newBalance > customer.CreditLimit)
                 {
-                    throw new Exception("Credit limit exceeded for this customer.");
+                    throw new Exception($"Credit limit exceeded. Current Balance: {customer.Balance}, New Debt: {totalAmount}, Limit: {customer.CreditLimit}.");
                 }
 
                 customer.Balance = newBalance;
-                _unitOfWork.Customers.Update(customer);
+                _unitOfWork.Customers.Update(customer); 
             }
 
             var invoice = new SaleInvoice
@@ -69,7 +74,7 @@ namespace SalesManagementSystem.Application.Features.Invoices.Commands
                 TotalAmount = totalAmount,
                 TotalPaid = (request.PaymentType == PaymentType.Cash) ? totalAmount : 0,
                 BalanceDue = (request.PaymentType == PaymentType.Cash) ? 0 : totalAmount,
-                Details = invoiceDetails 
+                Details = invoiceDetails
             };
 
             await _unitOfWork.Invoices.AddAsync(invoice);
