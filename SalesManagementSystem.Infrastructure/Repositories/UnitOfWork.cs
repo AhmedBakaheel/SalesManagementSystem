@@ -9,7 +9,7 @@ namespace SalesManagementSystem.Infrastructure.Repositories
         private readonly ApplicationDbContext _context;
 
         public IRepository<Customer> Customers { get; private set; }
-        public IRepository<Product> Products { get; private set; }
+        public IRepository<Product> ProductRepository { get; private set; }
         public IRepository<SaleInvoice> Invoices { get; private set; }
         public IRepository<Payment> Payments { get; private set; }
         public IRepository<InvoiceDetail> InvoiceDetails { get; private set; }
@@ -19,7 +19,7 @@ namespace SalesManagementSystem.Infrastructure.Repositories
             _context = context;
 
             Customers = new Repository<Customer>(_context);
-            Products = new Repository<Product>(_context);
+            ProductRepository = new Repository<Product>(_context);
             Invoices = new Repository<SaleInvoice>(_context);
             Payments = new Repository<Payment>(_context);
             InvoiceDetails = new Repository<InvoiceDetail>(_context);
