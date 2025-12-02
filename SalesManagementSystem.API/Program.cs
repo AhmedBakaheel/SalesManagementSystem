@@ -22,7 +22,7 @@ builder.Services.AddMediatR(typeof(IUnitOfWork).Assembly);
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddValidatorsFromAssembly(typeof(IUnitOfWork).Assembly);
 builder.Services.AddScoped<IAdvancedCustomerQueryService, AdvancedCustomerQueryService>();
-//builder.Services.AddScoped<IAdvancedProductQueryService, AdvancedProductQueryService>();
+builder.Services.AddScoped<IAdvancedProductQueryService, AdvancedProductQueryService>();
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 builder.Services.AddControllers();

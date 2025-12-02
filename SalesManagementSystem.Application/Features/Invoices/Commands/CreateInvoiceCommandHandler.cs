@@ -27,7 +27,7 @@ namespace SalesManagementSystem.Application.Features.Invoices.Commands
 
             foreach (var detailDto in request.Details)
             {
-                var product = await _unitOfWork.Products.GetByIdAsync(detailDto.ProductId);
+                var product = await _unitOfWork.ProductRepository.GetByIdAsync(detailDto.ProductId);
 
                 if (product == null || product.StockQuantity < detailDto.Quantity)
                 {
@@ -46,7 +46,7 @@ namespace SalesManagementSystem.Application.Features.Invoices.Commands
                 });
 
                 product.StockQuantity -= detailDto.Quantity;
-                _unitOfWork.Products.Update(product);
+                _unitOfWork.ProductRepository.Update(product);
             }
 
             if (request.PaymentType == PaymentType.Credit)

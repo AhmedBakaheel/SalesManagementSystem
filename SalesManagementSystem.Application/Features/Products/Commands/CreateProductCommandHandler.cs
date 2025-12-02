@@ -16,23 +16,26 @@ namespace SalesManagementSystem.Application.Features.Products.Commands
 
         public async Task<ProductDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var product = new Product
+            var productEntity = new Product
             {
                 Name = request.Name,
-                CurrentPrice = request.CurrentPrice,
-                StockQuantity = request.InitialStockQuantity
+                Description = request.Description,
+                CurrentPrice = request.CurrentPrice, 
+                StockQuantity = request.StockQuantity 
             };
 
-            await _unitOfWork.Products.AddAsync(product);
+            await _unitOfWork.ProductRepository.AddAsync(productEntity);
             await _unitOfWork.CompleteAsync();
 
-            return new ProductDto
+            var productDto = new ProductDto
             {
-                Id = product.Id,
-                Name = product.Name,
-                CurrentPrice = product.CurrentPrice,
-                StockQuantity = product.StockQuantity
+                Id = productEntity.Id,
+                Name = productEntity.Name,
+                CurrentPrice = productEntity.CurrentPrice,
+                StockQuantity = productEntity.StockQuantity
             };
+
+            return productDto;
         }
     }
 }
