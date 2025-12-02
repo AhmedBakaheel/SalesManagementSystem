@@ -45,6 +45,15 @@ namespace SalesManagementSystem.API.Controllers
             var result = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
+        //  /api/customers/withDebt
+        [HttpGet("withDebt")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<CustomerDebtDto>>> GetCustomersWithDebt()
+        {
+            var query = new GetCustomersWithDebtQuery();
+            var result = await _mediator.Send(query);
 
+            return Ok(result);
+        }
     }
 }
