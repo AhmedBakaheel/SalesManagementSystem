@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SalesManagementSystem.Application.DTOs.Products;
-using SalesManagementSystem.Application.DTOs.Common;
-using SalesManagementSystem.Application.Features.Products.Commands; 
+using SalesManagementSystem.Application.DTOs.Common; 
+using SalesManagementSystem.Application.Features.Products.Commands;
 using SalesManagementSystem.Application.Features.Products.Queries;
 
 namespace SalesManagementSystem.API.Controllers
@@ -40,11 +40,33 @@ namespace SalesManagementSystem.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] 
         public async Task<ActionResult<ProductDto>> Create(CreateProductCommand command)
         {
             var result = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)] 
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> Update(int id, UpdateProductCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+
+            var result = await _mediator.Send(command);
+
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
     }
 }
