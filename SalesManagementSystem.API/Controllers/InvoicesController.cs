@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SalesManagementSystem.Application.DTOs.Invoices;
 using SalesManagementSystem.Application.Features.Invoices.Commands;
+using SalesManagementSystem.Application.Features.Invoices.Queries;
 
 namespace SalesManagementSystem.API.Controllers
 {
@@ -31,6 +32,16 @@ namespace SalesManagementSystem.API.Controllers
             {
                 return BadRequest(new { Message = ex.Message });
             }
+        }
+        //  /api/invoices/TotalSales
+        [HttpGet("TotalSales")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<TotalSalesDto>> GetTotalSales()
+        {
+            var query = new GetTotalSalesQuery();
+            var result = await _mediator.Send(query);
+
+            return Ok(result);
         }
     }
 }
