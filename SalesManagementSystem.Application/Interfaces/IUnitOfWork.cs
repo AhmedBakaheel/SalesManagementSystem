@@ -10,6 +10,7 @@ namespace SalesManagementSystem.Application.Interfaces
         IRepository<Payment> Payments { get; }
         IRepository<InvoiceDetail> InvoiceDetails { get; }
         IRepository<InvoicePayment> InvoicePayments { get; }
+        IRepository<Supplier> Suppliers { get; }
         Task<int> CompleteAsync();
     }
 }

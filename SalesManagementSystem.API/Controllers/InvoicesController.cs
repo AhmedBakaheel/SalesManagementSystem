@@ -25,7 +25,6 @@ namespace SalesManagementSystem.API.Controllers
             try
             {
                 var response = await _mediator.Send(command);
-
                 return CreatedAtAction(nameof(CreateInvoice), response);
             }
             catch (Exception ex)
