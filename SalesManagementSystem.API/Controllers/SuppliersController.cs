@@ -25,7 +25,7 @@ public class SuppliersController : ControllerBase
 
         return CreatedAtAction(nameof(GetSupplierById), new { id = createdSupplier.Id }, createdSupplier);
     }
-    // المسار سيكون /api/suppliers
+    //   /api/suppliers
     [HttpGet] 
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<SupplierDto>>> GetAll([FromQuery] GetSuppliersListQuery query)
@@ -50,5 +50,58 @@ public class SuppliersController : ControllerBase
 
         return Ok(supplier);
     }
+    //  /api/suppliers/{id}
+    [HttpPut("{id}")] 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<SupplierDto>> Update(int id, [FromBody] UpdateSupplierCommand command)
+    {
+        if (id != command.Id)
+        {
+            return BadRequest("معرّف المورد في المسار لا يتطابق مع المعرّف في الجسم.");
+        }
 
+        try
+        {
+            var updatedSupplier = await _mediator.Send(command);
+            return Ok(updatedSupplier);
+        }
+        catch (Exception ex) when (ex.Message.Contains("لم يتم العثور"))
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+    //  /api/suppliers/{id}
+    [HttpDelete("{id}")] 
+    [ProducesResponseType(StatusCodes.Status204NoContent)] 
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> Delete(int id)
+    {
+        try
+        {
+            var command = new DeleteSupplierCommand(id);
+
+            await _mediator.Send(command);
+
+            return NoContent();
+        }
+        catch (Exception ex) when (ex.Message.Contains("لم يتم العثور"))
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex) when (ex.Message.Contains("لا يمكن حذف المورد"))
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
 }
