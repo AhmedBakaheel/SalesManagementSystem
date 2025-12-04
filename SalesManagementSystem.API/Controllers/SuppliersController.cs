@@ -36,9 +36,19 @@ public class SuppliersController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public Task<ActionResult<SupplierDto>> GetSupplierById(int id)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)] 
+    public async Task<ActionResult<SupplierDto>> GetSupplierById(int id)
     {
-        return Task.FromResult<ActionResult<SupplierDto>>(NotFound());
+        var query = new GetSupplierByIdQuery(id);
+        var supplier = await _mediator.Send(query);
+
+        if (supplier == null)
+        {
+            return NotFound($"لم يتم العثور على مورد بالمعرّف: {id}");
+        }
+
+        return Ok(supplier);
     }
 
 }
