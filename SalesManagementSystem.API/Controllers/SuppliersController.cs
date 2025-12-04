@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SalesManagementSystem.Application.Features.Suppliers.Commands;
 using SalesManagementSystem.Application.DTOs.Suppliers;
 using System.Threading.Tasks;
+using SalesManagementSystem.Application.Features.Suppliers.Queries;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -23,6 +24,15 @@ public class SuppliersController : ControllerBase
         var createdSupplier = await _mediator.Send(command);
 
         return CreatedAtAction(nameof(GetSupplierById), new { id = createdSupplier.Id }, createdSupplier);
+    }
+    // المسار سيكون /api/suppliers
+    [HttpGet] 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<SupplierDto>>> GetAll([FromQuery] GetSuppliersListQuery query)
+    {
+        var suppliersList = await _mediator.Send(query);
+
+        return Ok(suppliersList);
     }
 
     [HttpGet("{id}")]
