@@ -18,6 +18,9 @@ namespace SalesManagementSystem.Infrastructure.Data
         public DbSet<Payment> Payments { get; set; } = null!;
         public DbSet<InvoicePayment> InvoicePayments { get; set; } = null!;
         public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<PurchaseInvoice> PurchaseInvoices { get; set; }
+        public DbSet<PurchaseInvoiceDetail> PurchaseInvoiceDetails { get; set; }
+        public DbSet<SupplierPayment> SupplierPayments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

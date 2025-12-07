@@ -104,4 +104,14 @@ public class SuppliersController : ControllerBase
             throw;
         }
     }
+    //  /api/suppliers/debt
+    [HttpGet("debt")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<SupplierDto>>> GetDebtorSuppliers()
+    {
+        var query = new GetSuppliersWithOurDebtQuery();
+        var suppliersDebtList = await _mediator.Send(query);
+
+        return Ok(suppliersDebtList);
+    }
 }
