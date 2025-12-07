@@ -1,13 +1,9 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SalesManagementSystem.Application.DTOs.Customers; 
 
-namespace SalesManagementSystem.Application.Features.Payments.Commands
+namespace SalesManagementSystem.Application.Features.CustomerPayments.Commands
 {
-    public class CreatePaymentCommand : IRequest<int>
+    public class CreateCustomerPaymentCommand : IRequest<CustomerDto>
     {
         public int CustomerId { get; set; }
         public decimal Amount { get; set; }

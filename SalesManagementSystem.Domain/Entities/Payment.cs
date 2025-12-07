@@ -10,7 +10,6 @@ namespace SalesManagementSystem.Domain.Entities
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
-
         public DateTime PaymentDate { get; set; } = DateTime.Now;
         public decimal Amount { get; set; } 
         public string Notes { get; set; } = string.Empty;

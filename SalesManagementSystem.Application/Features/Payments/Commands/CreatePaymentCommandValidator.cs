@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 namespace SalesManagementSystem.Application.Features.Payments.Commands
 {
     using FluentValidation;
+    using global::SalesManagementSystem.Application.Features.CustomerPayments.Commands;
 
     namespace SalesManagementSystem.Application.Features.Payments.Commands
     {
-        public class CreatePaymentCommandValidator : AbstractValidator<CreatePaymentCommand>
+        public class CreatePaymentCommandValidator : AbstractValidator<CreateCustomerPaymentCommand>
         {
             public CreatePaymentCommandValidator()
             {

@@ -20,7 +20,7 @@ namespace SalesManagementSystem.Domain.Entities
         public decimal BalanceDue { get; set; }
 
         // Navigation Properties
-        public Customer Customer { get; set; } = null!; // علاقة واحد إلى متعدد (العميل)
+        public Customer Customer { get; set; } = null!; 
         public ICollection<InvoiceDetail> Details { get; set; } = new List<InvoiceDetail>();
         public ICollection<InvoicePayment> AllocatedPayments { get; set; } = new List<InvoicePayment>();
     }
